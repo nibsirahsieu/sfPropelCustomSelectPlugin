@@ -1,13 +1,10 @@
 <?php
-if (false === strpos(Propel::VERSION, '1.5')) {
+
+if (false !== strpos(Propel::VERSION, '1.4')) {
   require_once 'propel/engine/builder/om/php5/PHP5ObjectBuilder.php';
-} else {
+} elseif (false !== strpos(Propel::VERSION, '1.5')) {
   require_once 'builder/om/PHP5ObjectBuilder.php';
 }
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 class PHP5CustomObjectBuilder extends PHP5ObjectBuilder
 {

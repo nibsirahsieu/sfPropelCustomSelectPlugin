@@ -2,13 +2,9 @@
 
 if (false !== strpos(Propel::VERSION, '1.4')) {
   require_once 'propel/engine/builder/om/php5/PHP5PeerBuilder.php';
-} else {
+} elseif (false !== strpos(Propel::VERSION, '1.5')) {
   require_once 'builder/om/PHP5PeerBuilder.php';
 }
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 class PHP5CustomPeerBuilder extends PHP5PeerBuilder
 {
