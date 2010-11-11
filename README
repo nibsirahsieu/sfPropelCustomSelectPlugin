@@ -1,0 +1,43 @@
+# sfPropelCustomSelectPlugin #
+==============================
+
+The `sfPropelCustomSelectPlugin` is a symfony plugin that provides a capability to select arbitrary columns in propel,
+without loosing the power of ORM. Haven't tested it yet with propel 1.5
+
+## Installation ##
+  * Install the plugin (via a package)
+
+        symfony plugin:install --stability=beta sfPropelCustomSelectPlugin
+
+  * Activate the plugin in the `config/ProjectConfiguration.class.php`
+
+        [php]
+        class ProjectConfiguration extends sfProjectConfiguration
+        {
+          public function setup()
+          {
+            ...
+            $this->enablePlugins('sfPropelCustomSelectPlugin');
+            ...
+          }
+        }
+  * Change the path of the symfony builder settings in the `config/propel.ini` file of your project:
+
+    [ini]
+    propel.builder.peer.class = plugins.sfPropelCustomSelectPlugin.lib.builder.om.PHP5CustomPeerBuilder
+    propel.builder.object.class = plugins.sfPropelCustomSelectPlugin.lib.builder.om.PHP5CustomObjectBuilder
+
+  * (Re)build the model:
+    ./symfony propel:build-model
+
+## How to use ##
+  * define the columns you want to select. For example:
+    [php]
+    APeer::setSelectedColumns(APeer::ID, APeer::NAME);
+    APeer::doSelect(new Criteria());
+
+  * Join
+    [php]
+    APeer::setSelectedColumns(APeer::ID, APeer::NAME);
+    BPeer::setSelectedColumns(BPeer::ID, BPeer::NAME);
+    APeer::doSelectJoinB(new Criteria());
