@@ -7,7 +7,7 @@ without loosing the power of ORM. Haven't tested it yet with propel 1.5
 ## Installation ##
   * Install the plugin
 
-        git clone git@github.com:nibsirahsieu/sfPropelCustomSelectPlugin.git
+        git clone git://github.com/nibsirahsieu/sfPropelCustomSelectPlugin.git
 
   * Activate the plugin in the `config/ProjectConfiguration.class.php`
 
@@ -23,21 +23,21 @@ without loosing the power of ORM. Haven't tested it yet with propel 1.5
         }
   * Change the path of the symfony builder settings in the `config/propel.ini` file of your project:
 
-    [ini]
-    propel.builder.peer.class = plugins.sfPropelCustomSelectPlugin.lib.builder.om.PHP5CustomPeerBuilder
-    propel.builder.object.class = plugins.sfPropelCustomSelectPlugin.lib.builder.om.PHP5CustomObjectBuilder
+        [ini]
+        propel.builder.peer.class = plugins.sfPropelCustomSelectPlugin.lib.builder.om.PHP5CustomPeerBuilder
+        propel.builder.object.class = plugins.sfPropelCustomSelectPlugin.lib.builder.om.PHP5CustomObjectBuilder
 
   * (Re)build the model:
     ./symfony propel:build-model
 
 ## How to use ##
   * define the columns you want to select. For example:
-    [php]
-    APeer::setSelectedColumns(APeer::ID, APeer::NAME);
-    APeer::doSelect(new Criteria());
+        [php]
+        APeer::setSelectedColumns(APeer::ID, APeer::NAME);
+        APeer::doSelect(new Criteria());
 
   * Join
-    [php]
-    APeer::setSelectedColumns(APeer::ID, APeer::NAME);
-    BPeer::setSelectedColumns(BPeer::ID, BPeer::NAME);
-    APeer::doSelectJoinB(new Criteria());
+        [php]
+        APeer::setSelectedColumns(APeer::ID, APeer::NAME);
+        BPeer::setSelectedColumns(BPeer::ID, BPeer::NAME);
+        APeer::doSelectJoinB(new Criteria());
