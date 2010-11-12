@@ -5,9 +5,9 @@ The `sfPropelCustomSelectPlugin` is a symfony plugin that provides a capability 
 without loosing the power of ORM. Haven't tested it yet with propel 1.5
 
 ## Installation ##
-  * Install the plugin (via a package)
+  * Install the plugin
 
-        symfony plugin:install --stability=beta sfPropelCustomSelectPlugin
+        git clone git@github.com:nibsirahsieu/sfPropelCustomSelectPlugin.git
 
   * Activate the plugin in the `config/ProjectConfiguration.class.php`
 
