@@ -317,7 +317,7 @@ class PHP5CustomPeerBuilder extends PHP5PeerBuilder
 		}
 
 		".$this->getPeerClassname()."::addSelectColumns(\$criteria);
-		\$startcol = ".$this->getPeerClassname()."::getStartColumn();
+		\$startcol2 = ".$this->getPeerClassname()."::getStartColumn();
 ";
 		$index = 2;
 		foreach ($table->getForeignKeys() as $fk) {
