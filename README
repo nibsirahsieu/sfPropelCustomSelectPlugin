@@ -31,13 +31,5 @@ without loosing the power of ORM. Haven't tested it yet with propel 1.5
     ./symfony propel:build-model
 
 ## How to use ##
-  * define the columns you want to select. For example:
-        [php]
-        APeer::setSelectedColumns(APeer::ID, APeer::NAME);
-        APeer::doSelect(new Criteria());
-
-  * Join
-        [php]
-        APeer::setSelectedColumns(APeer::ID, APeer::NAME);
-        BPeer::setSelectedColumns(BPeer::ID, BPeer::NAME);
-        APeer::doSelectJoinB(new Criteria());
+    [url]
+    http://nibsirahsieu.wordpress.com/2010/11/14/sfpropelcustomselectplugin-sample-usage/
