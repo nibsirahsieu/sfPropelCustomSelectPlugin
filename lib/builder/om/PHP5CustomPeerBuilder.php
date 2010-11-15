@@ -1,10 +1,6 @@
 <?php
 
-if (false !== strpos(Propel::VERSION, '1.4')) {
-  require_once 'propel/engine/builder/om/php5/PHP5PeerBuilder.php';
-} elseif (false !== strpos(Propel::VERSION, '1.5')) {
-  require_once 'builder/om/PHP5PeerBuilder.php';
-}
+require_once 'propel/engine/builder/om/php5/PHP5PeerBuilder.php';
 
 class PHP5CustomPeerBuilder extends PHP5PeerBuilder
 {
@@ -116,31 +112,16 @@ class PHP5CustomPeerBuilder extends PHP5PeerBuilder
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria \$criteria, \$alias = null)
+	public static function addSelectColumns(Criteria \$criteria)
 	{
-    if (empty(self::\$selectedColumns)) {
-      if (null === \$alias) {";
-      foreach ($this->getTable()->getColumns() as $col) {
-        if (!$col->isLazyLoad()) {
-          $script .= "
-        \$criteria->addSelectColumn(".$this->getPeerClassname()."::".$this->getColumnName($col).");";
-        } // if !col->isLazyLoad
-      } // foreach
-      $script .= "
-      } else {";
-      foreach ($this->getTable()->getColumns() as $col) {
-        if (!$col->isLazyLoad()) {
-          if ($col->getPeerName()) {
-            $const = strtoupper($col->getPeerName());
-          } else {
-            $const = strtoupper($col->getName());
-          }
-          $script .= "
-        \$criteria->addSelectColumn(\$alias . '." . $const."');";
-        } // if !col->isLazyLoad
-      } // foreach
-    $script .="
-      }
+    if (empty(self::\$selectedColumns)) {";
+    foreach ($this->getTable()->getColumns() as $col) {
+      if (!$col->isLazyLoad()) {
+        $script .= "
+      \$criteria->addSelectColumn(".$this->getPeerClassname()."::".$this->getColumnName($col).");";
+      } // if !col->isLazyLoad
+    } // foreach
+    $script .= "
     } else {
       foreach (self::\$selectedColumns as \$selectedColumn) {
         \$criteria->addSelectColumn(\$selectedColumn);
