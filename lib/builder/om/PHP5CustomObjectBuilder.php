@@ -50,7 +50,7 @@ class PHP5CustomObjectBuilder extends PHP5ObjectBuilder
     $script .= "
       } else {
         foreach (\$selectedColumns as \$key => \$selectedColumn) {
-          \$this->setByName(\$selectedColumn, \$row[\$key], BasePeer::TYPE_COLNAME);
+          \$this->setByName(\$selectedColumn, \$row[\$key + \$startcol], BasePeer::TYPE_COLNAME);
         }
       }
     ";
