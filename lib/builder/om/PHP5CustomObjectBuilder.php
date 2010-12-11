@@ -78,4 +78,108 @@ class PHP5CustomObjectBuilder extends PHP5ObjectBuilder
 			throw new PropelException(\"Error populating ".$this->getStubObjectBuilder()->getClassname()." object\", \$e);
 		}";
 	}
+
+  /**
+	 * Adds the method that returns the referrer fkey collection.
+	 * @param      string &$script The script will be modified in this method.
+	 */
+	protected function addRefFKGet(&$script, ForeignKey $refFK)
+	{
+		$table = $this->getTable();
+		$tblFK = $refFK->getTable();
+
+		$peerClassname = $this->getStubPeerBuilder()->getClassname();
+		$fkPeerBuilder = $this->getNewPeerBuilder($refFK->getTable());
+		$relCol = $this->getRefFKPhpNameAffix($refFK, $plural = true);
+
+		$collName = $this->getRefFKCollVarName($refFK);
+		$lastCriteriaName = $this->getRefFKLastCriteriaVarName($refFK);
+
+		$className = $fkPeerBuilder->getObjectClassname();
+
+		$script .= "
+	/**
+	 * Gets an array of $className objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this ".$this->getObjectClassname()." has previously been saved, it will retrieve
+	 * related $relCol from storage. If this ".$this->getObjectClassname()." is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO \$con
+	 * @param      Criteria \$criteria
+	 * @return     array {$className}[]
+	 * @throws     PropelException
+	 */
+	public function get$relCol(\$criteria = null, PropelPDO \$con = null, array \$selectedColumns = null)
+	{";
+
+		$script .= "
+		if (\$criteria === null) {
+			\$criteria = new Criteria($peerClassname::DATABASE_NAME);
+		}
+		elseif (\$criteria instanceof Criteria)
+		{
+			\$criteria = clone \$criteria;
+		}
+
+		if (\$this->$collName === null) {
+			if (\$this->isNew()) {
+			   \$this->$collName = array();
+			} else {
+";
+		foreach ($refFK->getLocalColumns() as $colFKName) {
+			// $colFKName is local to the referring table (i.e. foreign to this table)
+			$lfmap = $refFK->getLocalForeignMapping();
+			$localColumn = $this->getTable()->getColumn($lfmap[$colFKName]);
+			$colFK = $refFK->getTable()->getColumn($colFKName);
+
+			$clo = strtolower($localColumn->getName());
+
+			$script .= "
+				\$criteria->add(".$fkPeerBuilder->getColumnConstant($colFK).", \$this->$clo);
+";
+		} // end foreach ($fk->getForeignColumns()
+
+		$script .= "
+        if (null !== \$selectedColumns) {
+          ".$fkPeerBuilder->getPeerClassname()."::setSelectedColumns(\$selectedColumns);
+        }
+				".$fkPeerBuilder->getPeerClassname()."::addSelectColumns(\$criteria);
+				\$this->$collName = ".$fkPeerBuilder->getPeerClassname()."::doSelect(\$criteria, \$con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!\$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+";
+		foreach ($refFK->getLocalColumns() as $colFKName) {
+			// $colFKName is local to the referring table (i.e. foreign to this table)
+			$lfmap = $refFK->getLocalForeignMapping();
+			$localColumn = $this->getTable()->getColumn($lfmap[$colFKName]);
+			$colFK = $refFK->getTable()->getColumn($colFKName);
+			$clo = strtolower($localColumn->getName());
+			$script .= "
+
+				\$criteria->add(".$fkPeerBuilder->getColumnConstant($colFK).", \$this->$clo);
+";
+		} // foreach ($fk->getForeignColumns()
+		$script .= "
+        if (null !== \$selectedColumns) {
+          ".$fkPeerBuilder->getPeerClassname()."::setSelectedColumns(\$selectedColumns);
+        }
+				".$fkPeerBuilder->getPeerClassname()."::addSelectColumns(\$criteria);
+				if (!isset(\$this->$lastCriteriaName) || !\$this->".$lastCriteriaName."->equals(\$criteria)) {
+					\$this->$collName = ".$fkPeerBuilder->getPeerClassname()."::doSelect(\$criteria, \$con);
+				}
+			}
+		}
+		\$this->$lastCriteriaName = \$criteria;
+		return \$this->$collName;
+	}
+";
+	} // addRefererGet()
 }
+
