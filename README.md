@@ -1,5 +1,4 @@
 # sfPropelCustomSelectPlugin #
-==============================
 
 The `sfPropelCustomSelectPlugin` is a symfony plugin that provides a capability to select arbitrary columns in propel,
 without loosing the power of ORM. This plugin is intented for propel 1.4. If you are using propel 1.5 you can using ModelCriteria::select() and ModelCriteria::withColumn() together to achieve the same result (http://www.propelorm.org/ticket/1172).
